@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Unduh 20 PDF paper open access ke folder papers/.
+# Unduh PDF paper open access ke folder papers/.
 set -u
 cd "$(dirname "$0")"
 UA="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
@@ -31,4 +31,17 @@ get "17_Voskergian2025.pdf" "https://www.frontiersin.org/journals/genetics/artic
 get "18_Jabbar2024.pdf" "https://www.mdpi.com/2673-7426/4/1/43/pdf"
 get "19_Li2025.pdf" "https://www.frontiersin.org/journals/endocrinology/articles/10.3389/fendo.2025.1651493/pdf"
 get "20_Li2024.pdf" "https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0311222&type=printable"
+get "23_Looareesuwan2023.pdf" "https://doi.org/10.1016/j.imu.2023.101285"
+get "24_Bernardini2023.pdf" "https://doi.org/10.1016/j.compbiomed.2023.107188"
+get "28_Aljenfawi2026.pdf" "https://doi.org/10.1016/j.ibmed.2026.100439"
+get "31_Chowdhury2024.pdf" "https://doi.org/10.1016/j.health.2023.100297"
+get "32_Guo2025.pdf" "https://doi.org/10.1016/j.imu.2025.101686"
+get "33_Shaheen2024.pdf" "https://doi.org/10.1109/ACCESS.2024.3398198"
+get "34_Obaido2024.pdf" "https://doi.org/10.1109/ACCESS.2024.3351188"
+get "35_Fazakis2026.pdf" "https://doi.org/10.1109/ACCESS.2026.3689690"
+get "36_Gressler2026.pdf" "https://doi.org/10.1109/ACCESS.2026.3673706"
+get "37_Ramadhan2024.pdf" "https://doi.org/10.1109/ACCESS.2024.3406748"
+get "38_Nayak2024.pdf" "https://doi.org/10.1016/j.ijmedinf.2024.105546"
+get "39_Luong2025.pdf" "https://doi.org/10.1016/j.xops.2024.100592"
+get "40_Wen2025.pdf" "https://doi.org/10.2196/64979"
 echo "Selesai: $ok berhasil, $fail perlu unduh manual."

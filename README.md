@@ -1,6 +1,6 @@
 # Review Paper: Metode Pengolahan Dataset Diabetes dan Komplikasinya
 
-Repositori untuk Tugas Review Paper dan Rencana Final Project. Isinya 20 paper open access (2023 sampai 2026) tentang pengolahan data klinis tabular diabetes dan komplikasinya, tabel review hasil membaca full text, dan analisis pemilihan paper utama.
+Repositori untuk Tugas Review Paper dan Rencana Final Project. Isinya 40 paper (2023 sampai 2026, semua dibaca full text) tentang pengolahan data klinis tabular diabetes dan komplikasinya, tabel review hasil membaca full text, dan analisis pemilihan paper utama.
 
 ## Dataset Final Project
 
@@ -12,8 +12,8 @@ Data follow-up pasien diabetes di Department of Diabetes and Endocrinology, Sixt
 
 | Path | Isi |
 |---|---|
-| `papers/` | 20 PDF paper, diberi nomor sesuai tabel |
-| `papers/SOURCES.md` | DOI, lisensi, dan tautan unduh tiap paper |
+| `papers/` | PDF paper open access, diberi nomor sesuai tabel (paper berlangganan hanya dirujuk lewat DOI) |
+| `papers/SOURCES.md` | DOI, lisensi, dan tautan tiap paper (40 paper) |
 | `papers/download_papers.sh` | Skrip untuk mengunduh ulang semua PDF |
 | `review/tabel_review.xlsx` | Tabel review lengkap (27 kolom) + sheet rekap frekuensi metode |
 | `review/tabel_review.csv` | Isi tabel yang sama dalam format CSV |
@@ -21,7 +21,8 @@ Data follow-up pasien diabetes di Department of Diabetes and Endocrinology, Sixt
 
 ## Metode Review
 
-- **Kriteria inklusi:** terbit 2023 atau sesudahnya, jurnal internasional peer-reviewed, open access, memakai data klinis tabular diabetes atau komplikasinya, dan membahas tahapan pengolahan data (missing value, imbalance, seleksi fitur, pemodelan, validasi).
+- **Kriteria inklusi:** terbit 2023 atau sesudahnya, jurnal internasional peer-reviewed, memakai data klinis tabular diabetes atau komplikasinya, dan membahas tahapan pengolahan data (missing value, imbalance, seleksi fitur, pemodelan, validasi).
+- **Komposisi:** 38 studi primer dan 1 survei metodologi (no. 37, Ramadhan 2024, dipakai sebagai kerangka SLR). Sebagian paper tidak memakai data komplikasi (diagnosis, readmisi, benchmark imbalance) dan dimasukkan sebagai bahan metode preprocessing dan contoh kritis; kolom Kategori menandainya.
 - **Ekstraksi:** semua paper dibaca full text. Kolom tabel mengikuti data extraction form dari pedoman SLR Kitchenham & Charters (2007), disesuaikan dengan domain checklist CHARMS untuk studi model prediksi klinis (sumber data, partisipan, outcome, prediktor, ukuran sampel, missing data, pengembangan model, performa, evaluasi).
 - **Catatan reviewer:** kolom keterbatasan memuat keterbatasan yang ditulis penulis ditambah temuan kritis saat membaca (misalnya inkonsistensi angka atau risiko data leakage).
 
@@ -51,15 +52,36 @@ Versi lengkap ada di [`review/tabel_review.xlsx`](review/tabel_review.xlsx).
 | 18 | [Jabbar & Washington 2024](papers/18_Jabbar2024.pdf) | BioMedInformatics | Prediksi diabetes | 162.453 (56.655 positif); 47 fitur; missing hingga 65% (b... | Dibandingkan: tanpa imputasi, auto-impute, konstanta, mean, median, multiple imputation (Bayesian Ridge). Seleksi: Tidak ada | Performa turun seiring bertambahnya fitur hilang; imputasi meratakan penurunan tapi variansnya membesar (he... | Stratified split 80/20 |
 | 19 | [Li Y dkk. 2025](papers/19_Li2025.pdf) | Frontiers in Endocrinology | PDPN (sangat tidak seimbang, 4,08%) | 1.984 (81 PDPN) | Missing ditangani dengan eksklusi (247 dibuang). Seleksi: LASSO 10-fold CV aturan 1-SE, 10 prediktor | RF AUC 0,913 (PR-AUC 0,488); LR AUC 0,894 dengan sensitivitas dan balanced accuracy tertinggi (dipilih) | Test set independen (594) + bootstrap 1.000 kali |
 | 20 | [Li W dkk. 2024](papers/20_Li2024.pdf) | PLOS ONE | Prediksi diabetes | Angka jumlah data tidak konsisten di naskah; prevalensi d... | Missing dihapus; recoding sesuai codebook. Seleksi: Korelasi Pearson dan uji chi-square | XGBoost tanpa resampling AUC 0,828 (recall 17%); stacking setelah SMOTEENN AUC 0,989; Acc 94,9% | Split 80/20; 5-fold CV untuk stacking |
+| 21 | [Wang Y dkk. 2023](papers/21_Wang2023.pdf) | Applied Soft Computing | Ada/tidak komplikasi T2D (biner, 24,5% pos... | 7.541 kasus awal, 1.913 sampel akhir (452 komplikasi), 46... | Fitur missing >80% dibuang; sisanya imputasi mean; one-hot nominal; fitur duplikat, teks, dan tak berkorelasi dengan target dibuang. Seleksi: Ekspa... | Akurasi 82,49%, sensitivity 0,397, specificity 0,957, G-mean 0,614; GBRTE 79,25%, RF 79,61%, SVM sensitivity 0 | 5-fold CV (tanpa validasi eksternal) |
+| 22 | [Ye S dkk. 2024](papers/22_Ye2024.pdf) | Diabetes Research and Clinical Practice | CHD, DN, DR, FLD (empat model biner) | 3.000 pasien, 88 fitur; 2.923 setelah cleaning | Fitur >50% missing dibuang (74 fitur tersisa); sampel dengan >10% fitur missing dibuang; tanpa imputasi (complete-case). Seleksi: Tanpa seleksi eks... | CatBoost terbaik, rata-rata AUC 90,47% (CHD 94,79; DN 90,63; DR 91,51; FLD 84,94) | 5-fold CV diulang 3 kali |
+| 23 | [Looareesuwan dkk. 2023](papers/23_Looareesuwan2023.pdf) | Informatics in Medicine Unlocked | Insiden DR (time-to-event, censoring) | 48.622 T2D tanpa DR di baseline; 3.044 DR; split 70/15/15 | Interval 6 bulan; missing 10-37% diimputasi multilevel MICE (cluster RS), 40 imputasi dirata-rata; standardisasi unit; kategorisasi fitur. Seleksi:... | CPH C-index 0,697 (IBS 0,0275); LTRC-RRF 0,568; LTRC-CIF 0,509. Prediktor: insulin, CKD, kontrol glikemik b... | Hold-out 15% (internal) |
+| 24 | [Bernardini dkk. 2023](papers/24_Bernardini2023.pdf) | Computers in Biology and Medicine | DR vs kontrol (22% DR) | 37.574 pasien, 48 prediktor | 48 dari 60 prediktor dipilih diabetolog; pasien dengan fitur lengkap-wajib tak lengkap dibuang; impute fitur dengan missing 3-40%; fitur >80% missi... | RF + ccGAN PR-AUC 66,16 (AUC 82,67) vs MICE 65,53; XGB + ccGAN 65,20 | 10-fold CV, nested 5-fold grid search, Wilcoxon |
+| 25 | [Laoh dkk. 2026](papers/25_Laoh2026.pdf) | Smart Health | DR (17,25%) | 97.786 pasien, 24 kandidat lab/komorbid | Cleaning, merging; imputasi median dan scaling di-fit di training lalu diterapkan ke val/test. Seleksi: TF-RCR dari 13.002 artikel PubMed + RFE ada... | Akurasi 95,35%, sensitivitas 91,17%, AUROC 97,24%, AUPRC 94,55%; XGB 24 fitur AUROC 0,9750 | Hold-out test 19.558 pasien + bootstrap 1000x (tanpa vali... |
+| 26 | [Hong dkk. 2026](papers/26_Hong2026.pdf) | Diabetes Research and Clinical Practice | DPNP (17,7%) | 500 pasien T2D, 43 kandidat variabel | Complete-case (pasien tidak lengkap dikeluarkan, tanpa imputasi). Seleksi: Univariat (p<0,05) lalu LASSO 10-fold lalu LR backward stepwise (7 varia... | AUC 0,863 (train) dan 0,813 (validasi); AUPRC 0,641/0,610; kalibrasi baik | Random split 70/30 + bootstrap 1000x |
+| 27 | [Sun Y dkk. 2025](papers/27_Sun2025.pdf) | Nutrition | Stroke (4,84%) | 15.676 pasien (759 stroke), 37 variabel | Variabel missing >15% dibuang; MICE untuk sisanya (sensitivitas vs mean dan PMM); VIF. Seleksi: Irisan LASSO, SVM-RFE, dan univariat+multivariat me... | RF terbaik AUC 0,95 (recall stroke 0,71, MCC 0,81); XGBoost 0,94; DNN 0,91; ResNet-18 0,58 | Split 8:2 + 10-fold CV |
+| 28 | [Aljenfawi dkk. 2026](papers/28_Aljenfawi2026.pdf) | Intelligence-Based Medicine | Severity ginjal dan oftalmik (mild/moderat... | 2.969 pasien, 158.595 kunjungan, 78 fitur | Gabung per ID + timestamp, buang duplikat, standardisasi unit, filter implausibel; imputasi interpolasi linear, forward/backward fill, median pasie... | BN PR-AUC 72-74% (oftalmik), 73-83% (ginjal); RF ginjal PR-AUC 0,92 / MCC 0,81 | Stratified 80/20, 100 trial, Mann-Whitney U |
+| 29 | [Okere dkk. 2025](papers/29_Okere2025.pdf) | Computers in Biology and Medicine | Progresi prediabetes ke diabetes (HbA1c ra... | 1.910 pasien (426 progres) | One-hot, agregasi per tahun, Quantile Transformation, variabel missing >50% dibuang, MICE-RF (di-fit di training). Seleksi: Pearson, VIF, step forw... | RF akurasi 0,900, AUC 0,963 (ET 0,962; XGB 0,952; LR 0,927); akurasi 74% menjadi 90% setelah pemrosesan | 80/20 + 10-fold CV |
+| 30 | [Elgendy dkk. 2025](papers/30_Elgendy2025.pdf) | Expert Systems with Applications | Diagnosis diabetes | 37.246 pasien (7.472 diabetes), 10 fitur; Pima 768 | LOF (k=30) + sparse autoencoder; outlier dihapus/diimputasi KNN/mean/nol; SMOTE setelah pembersihan outlier. Seleksi: Tanpa seleksi (semua fitur +... | Stacking MLP akurasi 92,54% (AUC 92,52) setelah outlier dihapus; KNN imputation 89,40% | Hold-out 80/20, tanpa CV |
+| 31 | [Chowdhury dkk. 2024](papers/31_Chowdhury2024.pdf) | Healthcare Analytics | Diabetes (18%) | 262.958 x 21 setelah filter | Drop missing, stratified split 80/20 sebelum sampling, one-hot (92 kolom); tanpa imputasi. Seleksi: 20 variabel dari literatur (tanpa seleksi formal) | ENN + GB terbaik: recall 0,717, AUC 0,791, akurasi 0,703; tanpa sampling recall 0,57-0,58 | Hold-out 80/20 stratified |
+| 32 | [Guo dkk. 2025](papers/32_Guo2025.pdf) | Informatics in Medicine Unlocked | Readmisi (11,23%) | 99.492 x 41 setelah cleaning | Drop kolom >50% missing; baris missing dibuang; binning kategori diagnosis; MinMaxScaler; one-hot. Seleksi: Variance, chi-square, ANOVA, MI, RFE (3... | Bagging RF akurasi 0,89, presisi 0,67; SMOTE menurunkan presisi RF 0,61 menjadi 0,44 | Split 80/20 stratified; 5/10-fold CV |
+| 33 | [Shaheen dkk. 2024](papers/33_Shaheen2024.pdf) | IEEE Access | Diabetes (8,5%) | 100.000 x 9 fitur | Factorize encoding; tanpa penanganan missing/outlier eksplisit. Seleksi: Tidak ada (SHAP) | Hi-Le akurasi 94%, F1 96%; HiTCLe akurasi 94%; model tunggal 89-91% | Train/test + 10-fold CV |
+| 34 | [Obaido dkk. 2024](papers/34_Obaido2024.pdf) | IEEE Access | Hyperchloremia (17%) | 1.177 pasien DKA | Imputasi (metode tidak disebut), ekstraksi fitur berbasis korelasi dengan outcome, standardisasi. Seleksi: Korelasi dengan outcome + random subspace | Tanpa SMOTE akurasi 94%; dengan SMOTE Bagging akurasi 100%, AUC 100% | 10-fold CV (tanpa hold-out) |
+| 35 | [Fazakis dkk. 2026](papers/35_Fazakis2026.pdf) | IEEE Access | Diabetes (imbalance buatan 60/80/100%) | Pima 768; NHANES 2.000 x 16 | Augmentasi hanya di training; threshold dituning di validation; NaN dengan KNN minoritas; clipping IQR; dedup. Seleksi: Tidak ada | GREAT+MAGA PR-AUC 0,6374, recall 0,9063; SMOTE J_VAL tertinggi 0,6958; klasik vs generatif hampir sama (0,6... | Train/val/test, 2 seed, tanpa CV |
+| 36 | [Gressler dkk. 2026](papers/36_Gressler2026.pdf) | IEEE Access | Diabetes (18,75%) | 3.535 dewasa (663 DM) | Complete case; outlier z-score di luar [-3,3] dibuang (426); LabelEncoder; MinMax. Seleksi: Berbasis korelasi EDA (set GLU atau A1C) | GLU: RF+ENN recall 93,98% [88,58-96,92], AUROC 0,954; A1C: RF+SMOTE recall 90,23%, AUROC 0,959 | Hold-out 80/20 (707 test), CI Wilson/bootstrap/Hanley-McNeil |
+| 37 | [Ramadhan dkk. 2024](papers/37_Ramadhan2024.pdf) | IEEE Access | Penyakit kronis (diabetes, stroke, kanker... | 182 paper, 4 RQ | Review: missing (mean/median/KNN/hapus baris), outlier (IQR), normalisasi. Seleksi: Review: filter, wrapper, embedded | Masalah data paling sering: imbalance > fitur > missing > outlier > normalisasi; sebagian studi balancing s... | Data extraction form + quality assessment |
+| 38 | [Nayak dkk. 2024](papers/38_Nayak2024.pdf) | International Journal of Medical Informatics | Stadium DKD 1-5; eGFR | 227 pasien, 93 variabel awal | Fitur missing >50% dibuang; eGFR/kreatinin dikeluarkan dari klasifikasi; imputasi median per-stadium (memakai label); scaling; one-hot. Seleksi: RF... | XGBoost akurasi 88,75%, AUC 0,97; RF 83,75%; SVM 66,25%; GBR eGFR R2 0,97 | Hold-out acak 80/20, tanpa CV |
+| 39 | [Luong dkk. 2025](papers/39_Luong2025.pdf) | Ophthalmology Science | DR (ICDR >1, 19%) | 1.590 subjek evaluable, 30 fitur awal | Missing >50% dibuang; near-zero variance; korelasi r>0,85; MICE (PMM) pada seluruh data sebelum split. Seleksi: Univariat (P<0,1) menjadi 16 variabel | Test AUC GBM 0,786, RF 0,774, LR 0,750, RRS 0,733 (RRS tidak beda signifikan dari 4 dari 5 MLM) | 10-fold CV di train + test 540 (internal) |
+| 40 | [Wen dkk. 2025](papers/40_Wen2025.pdf) | JMIR Medical Informatics | DN (444 DN, 556 non-DN) | 1.000 pasien T2DM, 87 fitur | Fitur missing >75% dibuang; multiple imputation iteratif; tanpa normalisasi. Seleksi: Uji univariat (P<0,001) + LASSO menjadi 24 fitur | XGBoost akurasi 86,87%, recall 84,40%, AUC 0,93; LightGBM 86,78% | 10-fold CV (tanpa hold-out dan validasi eksternal) |
 
-## Pola Temuan dari 20 Paper
+## Pola Temuan dari 40 Paper
 
-1. **Model:** XGBoost dan Random Forest paling sering diuji (masing-masing di 14 paper). Model terbaik bervariasi: XGBoost atau boosting di sebagian besar studi, tapi di paper no. 3, 4, 12, 14, dan 19 regresi logistik setara atau dipilih karena lebih stabil dan terkalibrasi.
-2. **Interpretabilitas:** SHAP dipakai di 13 paper dan sudah menjadi standar. HbA1c, durasi diabetes, dan penanda ginjal (kreatinin, eGFR, albuminuria) paling sering muncul sebagai prediktor teratas.
-3. **Missing value:** penanganan paling umum masih sederhana, yaitu membuang pasien atau variabel dengan missing tinggi lalu imputasi mean atau modus. Hanya sebagian kecil yang memakai MICE, KNN, atau MissForest. Paper no. 18 menunjukkan imputasi menambah ketidakstabilan performa seiring naiknya missingness.
-4. **Imbalance:** SMOTE dipakai di 4 paper. Paper no. 15 menerapkannya dengan benar (hanya di data training), sedangkan lonjakan AUC di paper no. 20 mengindikasikan resampling sebelum split. Paper no. 5 tidak menangani imbalance sehingga recall hanya 0,035.
-5. **Validasi:** 14 paper memakai K-fold CV, tapi hanya 2 paper (no. 6 dan no. 14) yang melakukan validasi eksternal di rumah sakit lain. Keduanya menunjukkan penurunan atau kestabilan performa yang tidak terlihat dari validasi internal saja.
-6. **Sumber data:** 14 dari 20 paper memakai data rumah sakit di Tiongkok, sehingga sebanding langsung dengan dataset Zenodo dari Shanghai.
+1. **Model:** Random Forest dan XGBoost paling sering diuji (sekitar 31 dan 24 dari 40 paper). Model terbaik bervariasi: boosting di sebagian besar studi, tetapi di paper no. 3, 4, 12, 14, 19, dan 23 regresi logistik atau Cox setara atau lebih stabil. Paper no. 23 (Cox 0,697 vs RF 0,568) menunjukkan model sederhana bisa mengalahkan ML.
+2. **Interpretabilitas:** SHAP dipakai di sekitar 24 paper dan sudah menjadi standar. HbA1c, durasi diabetes, dan penanda ginjal (kreatinin, eGFR, rasio albumin/kreatinin) paling sering muncul sebagai prediktor teratas.
+3. **Missing value:** penanganan paling umum masih membuang pasien atau variabel (sekitar 21 paper) atau imputasi mean/median/modus. MICE atau multiple imputation di sekitar 9 paper; ccGAN (no. 24) hanya menaikkan PR-AUC 0,6 poin dibanding MICE. Paper no. 18 menunjukkan imputasi menambah ketidakstabilan seiring naiknya missingness.
+4. **Imbalance:** SMOTE dan variannya di sekitar 17 paper. Praktik benar (hanya di training): no. 15, 25, 31, 35, 36, 38. Tidak benar atau tidak jelas: no. 20, 29, 30, 33, 34 (oversampling sebelum split atau sebelum CV). Paper no. 5 tidak menangani imbalance sehingga recall hanya 0,035; paper no. 32 memperlihatkan akurasi 0,89 hanya setara proporsi kelas mayoritas.
+5. **Data leakage adalah masalah paling sistematis.** Sedikitnya 11 paper (no. 20, 27 sampai 30, 33, 34, 36, 38, 39, 40) memiliki indikasi kebocoran: resampling, imputasi, outlier removal atau seleksi fitur sebelum split; imputasi memakai label (no. 38); atau prediktor yang mendefinisikan outcome (no. 12, 40: gagal ginjal dan rasio albumin/kreatinin untuk nefropati; no. 36: GLU/A1C untuk diagnosis diabetes). Akibatnya hasil seperti AUC 100% (no. 34) atau 94% (no. 33) sulit dipercaya.
+6. **Validasi:** sekitar 27 paper memakai K-fold CV, tetapi hanya 2 paper (no. 6 dan no. 14) yang melakukan validasi eksternal di rumah sakit lain.
+7. **Sumber data:** sekitar 19 dari 40 paper memakai data rumah sakit Tiongkok; paper no. 1, 21, 22, dan 40 memakai keluarga dataset National Population Health Data Center yang sama, sehingga sebanding langsung dengan dataset Zenodo dari Shanghai.
 
 ## Analisis: Paper Mana yang Sebaiknya Jadi Paper Utama?
 
@@ -72,6 +94,9 @@ Bobot penilaian tugas: kualitas jurnal 20%, kualitas artikel 20%, kedalaman revi
 | No. 12 Luo dkk. 2026 | Frontiers in Endocrinology | Tinggi: langkah imputasi sangat rinci | Banyak: AUC 0,979 kemungkinan karena prediktor bagian dari definisi DKD | Sangat tinggi: panel lab hampir identik | Sedang |
 | No. 8 Sabanayagam dkk. 2023 | eLife | Tinggi: CV berulang 40 kali | Sedang | Rendah: bergantung pada metabolit | Rendah |
 | No. 15 Liu L dkk. 2024 | Frontiers in Endocrinology | Tinggi: SMOTE yang benar, G-mean | Sedang: imputasi sebelum split | Tinggi | Tinggi |
+| No. 40 Wen dkk. 2025 | JMIR Medical Informatics | Tinggi: LASSO, imputasi, SMOTE, 6 model, DCA, kalibrasi, LIME dan SHAP | Banyak: prediktor penentu DN (gagal ginjal, rasio albumin/kreatinin), SMOTE tidak perlu, tanpa hold-out | Sangat tinggi: dataset keluarga yang sama dengan no. 1 | Tinggi |
+| No. 22 Ye dkk. 2024 | Diabetes Research and Clinical Practice | Sedang: seleksi fitur tidak ada, tanpa imputasi | Sedang: komplikasi lain sebagai fitur | Sangat tinggi: DR, DN, CHD, FLD | Sedang |
+| No. 25 Laoh dkk. 2026 | Smart Health | Sangat tinggi: pipeline bebas leakage | Sedang: komorbid sebagai prediktor | Tinggi: DR dari lab rutin | Tinggi |
 
 ### Rekomendasi: paper no. 1 (Wang dkk., 2024, *Scientific Reports*)
 
@@ -81,19 +106,19 @@ Bobot penilaian tugas: kualitas jurnal 20%, kualitas artikel 20%, kedalaman revi
 4. **Kelemahannya konkret untuk kedalaman review:** tidak ada validasi eksternal meski disebut di subjudul; split 50/25/25 tanpa CV pada evaluasi akhir; imputasi mean yang diakui menambah error; kelas 1:1 karena pemilihan sampel sehingga prevalensi tidak realistis; durasi diabetes tidak tersedia.
 5. **Langsung menjadi pijakan rencana FP.** Kelemahan di atas bisa dijawab di FP: imputasi yang lebih baik (MICE atau MissForest, dirujuk dari paper no. 7, 11, 13, 18), penanganan imbalance yang benar (no. 15, 19), dan evaluasi yang lebih kuat (K-fold berulang seperti no. 8).
 
-**Cadangan:** paper no. 3 (Liu X dkk., 2025) jika ingin paper dengan pelaporan paling rapi. Paper no. 12 lebih cocok dijadikan contoh di bagian analisis kritis daripada paper utama, karena AUC-nya yang sangat tinggi patut dicurigai.
+**Cadangan:** paper no. 40 (Wen dkk., 2025) sebagai pembanding langsung karena memakai keluarga dataset yang sama dan punya masalah leakage yang jelas untuk dibahas; paper no. 3 (Liu X dkk., 2025) jika ingin paper dengan pelaporan paling rapi; paper no. 25 (Laoh dkk., 2026) sebagai contoh pipeline bebas leakage. Paper no. 12 dan no. 40 lebih cocok dijadikan contoh di bagian analisis kritis daripada paper utama, karena AUC-nya yang sangat tinggi patut dicurigai.
 
 ## Gap untuk Rencana Final Project
 
-- Validasi eksternal jarang dilakukan (2 dari 20 paper).
+- Validasi eksternal jarang dilakukan (2 dari 40 paper).
 - Imputasi mayoritas masih mean atau modus; perbandingan sistematis metode imputasi pada data komplikasi diabetes masih sedikit.
-- Risiko data leakage (resampling atau imputasi sebelum split, prediktor yang merupakan bagian dari definisi outcome) sering tidak dibahas.
-- Komplikasi hampir selalu dimodelkan satu per satu; hanya paper no. 16 dan 17 yang menangani beberapa komplikasi sekaligus.
-- Variabel gaya hidup, kesadaran pasien, kepatuhan terapi, dan faktor genetik, yang tersedia di dataset Zenodo, jarang dipakai di 20 paper ini.
+- Risiko data leakage (resampling atau imputasi sebelum split, prediktor yang merupakan bagian dari definisi outcome) sering tidak dibahas, padahal ditemukan di sedikitnya 11 dari 40 paper.
+- Komplikasi hampir selalu dimodelkan satu per satu; hanya paper no. 16, 17, 21, 22, dan 28 yang menangani beberapa komplikasi sekaligus.
+- Variabel gaya hidup, kesadaran pasien, kepatuhan terapi, dan faktor genetik, yang tersedia di dataset Zenodo, jarang dipakai di 40 paper ini.
 
 ## Lisensi
 
-Semua PDF di `papers/` adalah artikel open access (CC BY, CC BY-NC, atau CC BY-NC-ND) dan disimpan tanpa perubahan untuk keperluan akademik. Hak cipta tetap milik penulis dan penerbit masing-masing. Rincian lisensi per paper ada di [`papers/SOURCES.md`](papers/SOURCES.md).
+PDF di `papers/` hanya untuk artikel open access dan disimpan tanpa perubahan untuk keperluan akademik. Tujuh paper berlangganan (no. 21, 22, 25, 26, 27, 29, 30) tidak disalin; bacalah lewat DOI dengan akses institusi. Hak cipta tetap milik penulis dan penerbit masing-masing. Rincian lisensi per paper ada di [`papers/SOURCES.md`](papers/SOURCES.md).
 
 ## Referensi Format Review
 
